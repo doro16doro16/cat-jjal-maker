@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>강아지 가라사대</title>
+  </head>
+  <style>
+    body {
+      text-align: center;
+    }
+    .main-card button {
+      position: relative;
+      left: -45px;
+      bottom: 15px;
+    }
+    .favorites {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+  </style>
+  <body>
+    <div id="app"></div>
+
+    <script
+      src="https://unpkg.com/react@17/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+      const jsonLocalStorage = {
+        setItem: (key, value) => {
+          localStorage.setItem(key, JSON.stringify(value));
+        },
+        getItem: (key) => {
+          return JSON.parse(localStorage.getItem(key));
+        },
+      };
+
+      console.log("멍멍");
+      // 태그 만들기
+
+      const Title = (props) => {
+        return <h1>{props.children}</h1>;
+      };
+
+      const Form = ({ updateMainDog }) => {
+        const includesHangul = (text) => /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/i.test(text);
+        const [value, setValue] = React.useState("");
+        const [errorMessage, setErrorMessage] = React.useState("");
+
+        function handleInputChange(e) {
+          const userValue = e.target.value;
+          setErrorMessage("");
+          if (includesHangul(userValue)) {
+            setErrorMessage("한글은 입력할 수 없습니다.");
+          }
+          setValue(userValue.toUpperCase());
+        }
+
+        function handleFormSubmit(e) {
+          e.preventDefault();
+          setErrorMessage("");
+          if (value === "") {
+            setErrorMessage("빈 값으로 만들 수 없습니다.");
+            return;
+          }
+          updateMainDog();
+        }
+        return (
+          <form onSubmit={handleFormSubmit}>
+            <input
+              type="text"
+              name="name"
+              placeholder="영어 대사를 입력해주세요"
+              value={value}
+              onChange={handleInputChange}
+            />
+            <button type="submit">생성</button>
+            <p style={{ color: "red" }}>{errorMessage}</p>
+          </form>
+        );
+      };
+
+      function DogItem({ img }) {
+        return (
+          <li>
+            <img src={img} style={{ width: "150px" }} />
+          </li>
+        );
+      }
+
+      function Favorites({ favorites }) {
+        return (
+          <ul className="favorites">
+            {favorites.map((dog) => (
+              <DogItem img={dog} key={dog} />
+            ))}
+          </ul>
+        );
+      }
+
+      const MainCard = ({ img, onHeartClick }) => {
+        return (
+          <div className="main-card">
+            <img src={img} alt="강아지" width="400" />
+            <button onClick={onHeartClick}>🤍</button>
+          </div>
+        );
+      };
+      // tag -> component
+      const App = () => {
+        const Dog1 =
+          "https://images.squarespace-cdn.com/content/v1/53a60116e4b0488fb14d69d8/1597336605370-5BEYBPCYKAZEMWC4J7KQ/image-asset.jpeg?format=2500w";
+        const Dog2 =
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShlSI6hAv7jlg0gqZlRluzh4CrCHmvWfjJvA&usqp=CAU";
+        const Dog3 =
+          "https://d279m997dpfwgl.cloudfront.net/wp/2019/10/AP_18169701089570-1000x694.jpg";
+
+        const [counter, setCounter] = React.useState(
+          jsonLocalStorage.getItem("counter")
+        ); // 1은 초기값
+        const [mainDog, setMainDog] = React.useState(Dog1);
+        const [favorites, setFavorites] = React.useState(
+          jsonLocalStorage.getItem("favorites") || []
+        );
+
+        function updateMainDog(event) {
+          setMainDog(Dog2);
+          const nextCounter = counter + 1;
+          setCounter(nextCounter);
+          jsonLocalStorage.setItem("counter", nextCounter);
+        }
+
+        function handleHeartClick() {
+          const nextFavorites = [...favorites, mainDog];
+          setFavorites(nextFavorites);
+          jsonLocalStorage.setItem("favorites", nextFavorites);
+        }
+
+        return (
+          <div>
+            <Title>{counter}번째 강아지 가라사대</Title>
+            <Form updateMainDog={updateMainDog} />
+            <MainCard img={mainDog} onHeartClick={handleHeartClick} />
+            <Favorites favorites={favorites} />
+          </div>
+        );
+      };
+      const 여기다그려 = document.querySelector("#app");
+      ReactDOM.render(<App />, 여기다그려);
+    </script>
+  </body>
+</html>
