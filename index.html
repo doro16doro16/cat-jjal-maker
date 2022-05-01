@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>고양이 가라사대</title>
+    <title>강아지 가라사대</title>
   </head>
   <style>
     body {
@@ -45,6 +45,7 @@
         },
       };
 
+<<<<<<< HEAD
       const fetchCat = async (text) => {
         const OPEN_API_DOMAIN = "https://cataas.com";
         const response = await fetch(
@@ -53,6 +54,8 @@
         const responseJson = await response.json();
         return `${OPEN_API_DOMAIN}/${responseJson.url}`;
       };
+=======
+>>>>>>> ef112bb65109303c63a70927c64cc863ba5a33d8
       console.log("멍멍");
       // 태그 만들기
 
@@ -60,7 +63,11 @@
         return <h1>{props.children}</h1>;
       };
 
+<<<<<<< HEAD
       const Form = ({ updateMainCat }) => {
+=======
+      const Form = ({ updateMainDog }) => {
+>>>>>>> ef112bb65109303c63a70927c64cc863ba5a33d8
         const includesHangul = (text) => /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/i.test(text);
         const [value, setValue] = React.useState("");
         const [errorMessage, setErrorMessage] = React.useState("");
@@ -81,7 +88,11 @@
             setErrorMessage("빈 값으로 만들 수 없습니다.");
             return;
           }
+<<<<<<< HEAD
           updateMainCat(value);
+=======
+          updateMainDog();
+>>>>>>> ef112bb65109303c63a70927c64cc863ba5a33d8
         }
         return (
           <form onSubmit={handleFormSubmit}>
@@ -98,7 +109,11 @@
         );
       };
 
+<<<<<<< HEAD
       function CatItem({ img }) {
+=======
+      function DogItem({ img }) {
+>>>>>>> ef112bb65109303c63a70927c64cc863ba5a33d8
         return (
           <li>
             <img src={img} style={{ width: "150px" }} />
@@ -107,6 +122,7 @@
       }
 
       function Favorites({ favorites }) {
+<<<<<<< HEAD
         if (favorites.length === 0) {
           return <div>사진 위 하트를 눌러 고양이 사진을 저장해봐요!</div>;
         }
@@ -114,22 +130,37 @@
           <ul className="favorites">
             {favorites.map((cat) => (
               <CatItem img={cat} key={cat} />
+=======
+        return (
+          <ul className="favorites">
+            {favorites.map((dog) => (
+              <DogItem img={dog} key={dog} />
+>>>>>>> ef112bb65109303c63a70927c64cc863ba5a33d8
             ))}
           </ul>
         );
       }
 
+<<<<<<< HEAD
       const MainCard = ({ img, onHeartClick, alreadyFavorite }) => {
         const heartIcon = alreadyFavorite ? "❤️‍🩹" : "🤍";
         return (
           <div className="main-card">
             <img src={img} alt="고양이" width="400" />
             <button onClick={onHeartClick}>{heartIcon}</button>
+=======
+      const MainCard = ({ img, onHeartClick }) => {
+        return (
+          <div className="main-card">
+            <img src={img} alt="강아지" width="400" />
+            <button onClick={onHeartClick}>🤍</button>
+>>>>>>> ef112bb65109303c63a70927c64cc863ba5a33d8
           </div>
         );
       };
       // tag -> component
       const App = () => {
+<<<<<<< HEAD
         const Cat1 =
           "http://www.animal.go.kr/files/shelter/2020/04/202005171105159.jpg";
         const Cat2 =
@@ -173,12 +204,39 @@
 
         function handleHeartClick() {
           const nextFavorites = [...favorites, mainCat];
+=======
+        const Dog1 =
+          "https://images.squarespace-cdn.com/content/v1/53a60116e4b0488fb14d69d8/1597336605370-5BEYBPCYKAZEMWC4J7KQ/image-asset.jpeg?format=2500w";
+        const Dog2 =
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShlSI6hAv7jlg0gqZlRluzh4CrCHmvWfjJvA&usqp=CAU";
+        const Dog3 =
+          "https://d279m997dpfwgl.cloudfront.net/wp/2019/10/AP_18169701089570-1000x694.jpg";
+
+        const [counter, setCounter] = React.useState(
+          jsonLocalStorage.getItem("counter")
+        ); // 1은 초기값
+        const [mainDog, setMainDog] = React.useState(Dog1);
+        const [favorites, setFavorites] = React.useState(
+          jsonLocalStorage.getItem("favorites") || []
+        );
+
+        function updateMainDog(event) {
+          setMainDog(Dog2);
+          const nextCounter = counter + 1;
+          setCounter(nextCounter);
+          jsonLocalStorage.setItem("counter", nextCounter);
+        }
+
+        function handleHeartClick() {
+          const nextFavorites = [...favorites, mainDog];
+>>>>>>> ef112bb65109303c63a70927c64cc863ba5a33d8
           setFavorites(nextFavorites);
           jsonLocalStorage.setItem("favorites", nextFavorites);
         }
 
         return (
           <div>
+<<<<<<< HEAD
             <Title>{counter ? counter + "번째 " : ""}고양이 가라사대</Title>
             <Form updateMainCat={updateMainCat} />
             <MainCard
@@ -186,6 +244,11 @@
               onHeartClick={handleHeartClick}
               alreadyFavorite={alreadyFavorite}
             />
+=======
+            <Title>{counter}번째 강아지 가라사대</Title>
+            <Form updateMainDog={updateMainDog} />
+            <MainCard img={mainDog} onHeartClick={handleHeartClick} />
+>>>>>>> ef112bb65109303c63a70927c64cc863ba5a33d8
             <Favorites favorites={favorites} />
           </div>
         );
